@@ -1,0 +1,388 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoles {
+  User
+  Moderator
+  Admin
+}
+
+enum Visibility {
+  Public
+  Private
+  Followers
+}
+
+enum ClubRoles {
+  Owner
+  Assistant
+  Member
+}
+
+enum ImageOrientation {
+  Vertical
+  Horizontal
+  Square
+}
+
+enum ImageFormat {
+  jpeg
+  jpg
+  avif
+}
+
+enum MembershipStatus {
+  Pending
+  Approved
+  Rejected
+  Blocked
+}
+
+model User {
+  id                 String               @id @default(uuid()) @db.Uuid
+  email              String               @unique
+  password           String
+  username           String               @unique
+  avatar             String               @default("default-user.jpg")
+  roles              UserRoles[]          @default([User])
+  location           String               @default("")
+  about              String               @default("")
+  isBlocked          Boolean              @default(false) @map("is_blocked")
+  isDeleted          Boolean              @default(false) @map("is_deleted")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  likedPosts         LikedPost[]
+  savedPosts         PostSaving[]
+  savedImages        ImageSaving[]
+  savedCollections   CollectionSaving[]
+  followings         Following[]          @relation("following")
+  followers          Following[]          @relation("followers")
+  notifications      Notification[]       @relation("notification_user")
+  sentNotifications  Notification[]       @relation("notification_sender")
+  collections        Collection[]
+  comments           Comment[]
+  posts              Post[]
+  reports            Report[]
+  images             Image[]
+  settings           Settings?
+  memberships        ClubMembership[]
+  refreshSessions    RefreshSession[]
+  passwordResetToken PasswordResetToken[]
+  club               Club?
+
+  @@map("user")
+}
+
+model Settings {
+  id                   String     @id @default(uuid()) @db.Uuid
+  theme                String     @default("system")
+  colorTheme           String     @default("default") @map("color_theme")
+  profileVisibility    Visibility @default(Public) @map("profile_visibility")
+  galleryVisibility    Visibility @default(Public) @map("gallery_visibility")
+  allowDownload        Boolean    @default(false) @map("allow_download")
+  allowClubsPosts      Boolean    @default(true) @map("allow_clubs_posts")
+  allowFollowingsPosts Boolean    @default(true) @map("allow_following_posts")
+  allowPopularPosts    Boolean    @default(true) @map("allow_popular_posts")
+  user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String     @unique @map("user_id") @db.Uuid
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime   @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+model Post {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  visibility  Visibility   @default(Public)
+  likesCount  Int          @default(0)
+  isBlocked   Boolean      @default(false) @map("is_blocked")
+  isDeleted   Boolean      @default(false) @map("is_deleted")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String       @map("user_id") @db.Uuid
+  image       Image        @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId     String       @unique @map("image_id") @db.Uuid
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  savedBy     PostSaving[]
+  likedBy     LikedPost[]
+  clubPosts   ClubPost[]
+  comments    Comment[]
+  categories  Category[]
+
+  @@map("post")
+}
+
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  clubs       Club[]
+  posts       Post[]
+
+  @@map("category")
+}
+
+model PostSaving {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id") @db.Uuid
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id") @db.Uuid
+
+  @@id([userId, postId])
+  @@map("post_saving")
+}
+
+model LikedPost {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id") @db.Uuid
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id") @db.Uuid
+
+  @@id([userId, postId])
+  @@map("liked_post")
+}
+
+model Image {
+  id          String            @id @default(uuid()) @db.Uuid
+  src         String            @unique
+  weight      Int
+  width       Int
+  height      Int
+  format      ImageFormat
+  orientation ImageOrientation
+  isBlocked   Boolean           @default(false) @map("is_blocked")
+  isDeleted   Boolean           @default(false) @map("is_deleted")
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String            @map("user_id") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  savedBy     ImageSaving[]
+  collections CollectionImage[]
+  post        Post?
+
+  @@map("image")
+}
+
+model ImageSaving {
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String @map("user_id") @db.Uuid
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String @map("image_id") @db.Uuid
+
+  @@id([userId, imageId])
+  @@map("image_saving")
+}
+
+model Collection {
+  id         String             @id @default(uuid()) @db.Uuid
+  name       String
+  visibility Visibility         @default(Public)
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String             @map("user_id") @db.Uuid
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+  savedBy    CollectionSaving[]
+  images     CollectionImage[]
+
+  @@map("collection")
+}
+
+model CollectionSaving {
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String     @map("user_id") @db.Uuid
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String     @map("collection_id") @db.Uuid
+
+  @@id([userId, collectionId])
+  @@map("collection_saving")
+}
+
+model CollectionImage {
+  image        Image      @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId      String     @map("image_id") @db.Uuid
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String     @map("collection_id") @db.Uuid
+
+  @@id([imageId, collectionId])
+  @@map("collection_image")
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  comment   String
+  isBlocked Boolean  @default(false) @map("is_blocked")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id") @db.Uuid
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String   @map("post_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("comment")
+}
+
+model Report {
+  id        String    @id @default(uuid()) @db.Uuid
+  type      String
+  text      String
+  read      DateTime?
+  isMarked  Boolean   @default(false) @map("is_marked")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String    @map("user_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("report")
+}
+
+model RefreshSession {
+  id           String   @id @default(uuid()) @db.Uuid
+  refreshToken String   @unique @map("refresh_token")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @map("user_id") @db.Uuid
+  expiresAt    DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("refresh_session")
+}
+
+model PasswordResetToken {
+  id         String   @id @default(uuid()) @db.Uuid
+  resetToken String   @unique @map("reset_token")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @unique @map("user_id") @db.Uuid
+  expiresAt  DateTime
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("password_reset_token")
+}
+
+model Club {
+  id          String           @id @default(uuid()) @db.Uuid
+  name        String           @unique
+  image       String           @unique
+  description String
+  ownerId     String           @unique @map("owner_id") @db.Uuid
+  owner       User             @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  categories  Category[]
+  post        ClubPost[]
+  settings    ClubSettings?
+  memberships ClubMembership[]
+
+  @@map("club")
+}
+
+model ClubSettings {
+  id        String   @id @default(uuid()) @db.Uuid
+  isPrivate Boolean  @default(false) @map("is_private")
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId    String   @unique @map("club_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("club_settings")
+}
+
+model ClubMembership {
+  id        String           @id @default(uuid()) @db.Uuid
+  roles     ClubRoles[]      @default([Member])
+  status    MembershipStatus @default(Pending)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String           @map("user_id") @db.Uuid
+  club      Club             @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId    String           @map("club_id") @db.Uuid
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@unique([userId, clubId])
+  @@map("club_membership")
+}
+
+model ClubPost {
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id") @db.Uuid
+  club   Club   @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId String @map("club_id") @db.Uuid
+
+  @@id([postId, clubId])
+  @@map("club_post")
+}
+
+model Article {
+  id              String   @id @default(uuid()) @db.Uuid
+  title           String   @unique
+  image           String   @unique
+  articleHtml     String   @map("article_html")
+  articleMarkdown String   @map("article_markdown")
+  isPublished     Boolean  @default(false) @map("is_published")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("article")
+}
+
+model Following {
+  id         String   @id @default(uuid()) @db.Uuid
+  follower   User     @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId String   @map("follower_id") @db.Uuid
+  target     User     @relation("followers", fields: [targetId], references: [id], onDelete: Cascade)
+  targetId   String   @map("target_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([followerId, targetId])
+  @@map("following")
+}
+
+model Notification {
+  id           String    @id @default(uuid()) @db.Uuid
+  title        String
+  textHtml     String    @map("text_html")
+  textMarkdown String    @map("text_markdown")
+  read         DateTime?
+  user         User      @relation("notification_user", fields: [userId], references: [id], onDelete: Cascade)
+  userId       String    @map("user_id") @db.Uuid
+  sender       User      @relation("notification_sender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId     String    @map("sender_id") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("notification")
+}
+
+model Contest {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @unique
+  poster       String   @unique
+  textHtml     String   @map("text_html")
+  textMarkdown String   @map("text_markdown")
+  start        DateTime
+  votingStart  DateTime @map("voting_start")
+  votingEnd    DateTime @map("voting_end")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("contest")
+}
