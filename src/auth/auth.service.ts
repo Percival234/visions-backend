@@ -29,11 +29,7 @@ export class AuthService {
       return null;
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      throw new BadRequestException('Невірна електронна адреса або пароль');
-    }
+    await this.comparePassword(password, user.password);
 
     return user;
   }
@@ -63,6 +59,24 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async hashPassword(password: string) {
+    const salt = await bcrypt.genSalt();
+
+    const hash = await bcrypt.hash(password, salt);
+
+    return hash;
+  }
+
+  async comparePassword(hashedPassword: string, password: string) {
+    const isMatch = await bcrypt.compare(hashedPassword, password);
+
+    if (!isMatch) {
+      throw new BadRequestException('Невірний пароль');
+    }
+
+    return isMatch;
   }
 
   async generateAccessToken(payload: TokenPayload) {

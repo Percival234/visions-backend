@@ -22,4 +22,13 @@ export class UpdateUserDto implements Prisma.UserUpdateInput {
   @IsOptional()
   @IsBoolean({ message: 'Поле "isDeleted" має бути логічного типу' })
   isDeleted?: boolean;
+
+  @IsOptional()
+  @IsString({ message: 'Поточний пароль має бути рядком' })
+  currentPassword?: string;
+
+  @IsString({ message: 'Новий пароль має бути рядком' })
+  @MinLength(8, { message: 'Новий пароль має містити щонайменше 8 символів' })
+  @MaxLength(16, { message: 'Новий пароль має містити не більше 16 символів' })
+  newPassword?: string;
 }

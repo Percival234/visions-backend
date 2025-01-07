@@ -19,10 +19,9 @@ import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Request, Response } from 'express';
-import * as bcrypt from 'bcrypt';
 import { SignUpDto } from './dto/sign-up.dto';
 import { RefreshTokenGuard } from 'src/auth/guards/refresh-token.guard';
-import { User, UserRoles } from '@prisma/client';
+import { Prisma, User, UserRoles } from '@prisma/client';
 import {
   TokenPayload,
   TokenUserPayload,
@@ -69,11 +68,9 @@ export class UsersController {
     @Body() credentials: SignUpDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const isEmailExist = await this.usersService.findByEmail(credentials.email);
+    const { email, password, username } = credentials;
 
-    const isUsernameExist = await this.usersService.findByUsername(
-      credentials.username,
-    );
+    const isEmailExist = await this.usersService.findByEmail(email);
 
     if (isEmailExist) {
       throw new BadRequestException(
@@ -81,13 +78,13 @@ export class UsersController {
       );
     }
 
+    const isUsernameExist = await this.usersService.findByUsername(username);
+
     if (isUsernameExist) {
       throw new BadRequestException("Користувач з таким ім'ям уже існує");
     }
 
-    const salt = await bcrypt.genSalt();
-
-    const hash = await bcrypt.hash(credentials.password, salt);
+    const hash = await this.authService.hashPassword(password);
 
     credentials.password = hash;
 
@@ -147,6 +144,8 @@ export class UsersController {
 
     const profile = await this.usersService.findProfileById(sub);
 
+    console.log(profile);
+
     return profile;
   }
 
@@ -156,45 +155,67 @@ export class UsersController {
     return profile;
   }
 
+  // TODO добавити зміну аватарки
   @Patch(':id')
   async update(
     @Req() request: Request,
-    @Param() params: IdParamDto,
+    @Param() { id }: IdParamDto,
     @Body() updateUser: UpdateUserDto,
   ) {
     const user = request.user as TokenUserPayload;
 
-    if (user.sub !== params.id || !user.roles.includes(UserRoles.Admin)) {
+    const { email, username, newPassword, currentPassword, ...props } =
+      updateUser;
+
+    const userData: Prisma.UserUpdateInput = { ...props };
+
+    if (user.sub !== id || !user.roles.includes(UserRoles.Admin)) {
       throw new ForbiddenException('В доступі відмовлено');
     }
 
-    if (updateUser.email) {
-      const isExist = await this.usersService.findByEmail(updateUser.email);
+    if (email) {
+      const isExist = await this.usersService.findByEmail(email);
 
       if (isExist) {
         throw new BadRequestException(
           'Користувач з такою електронною поштою уже існує',
         );
       }
+
+      userData.email = email;
     }
 
-    if (updateUser.username) {
-      const isExist = await this.usersService.findByUsername(
-        updateUser.username,
-      );
+    if (username) {
+      const isExist = await this.usersService.findByUsername(username);
 
       if (isExist) {
         throw new BadRequestException("Користувач з таким ім'ям уже існує");
       }
+
+      userData.username = username;
     }
 
-    const updatedUser = await this.usersService.update(params.id, updateUser);
+    if (currentPassword && newPassword) {
+      const user = await this.usersService.findById(id);
+
+      await this.authService.comparePassword(currentPassword, user.password);
+
+      const hash = await this.authService.hashPassword(newPassword);
+
+      if (hash === user.password) {
+        throw new BadRequestException(
+          'Новий пароль не може співпадати зі старим',
+        );
+      }
+
+      userData.password = hash;
+    }
+
+    const updatedUser = await this.usersService.update(id, userData);
 
     return updatedUser;
   }
 
-  // TODO добавити зміну аватарки та паролю (старий пароль не можна)
-  // TODO адмін може міняти дані користувачів
   @Roles(UserRoles.Admin, UserRoles.Moderator)
   @Patch(':id/block')
   async block(
@@ -232,7 +253,7 @@ export class UsersController {
 
   @Roles(UserRoles.Admin)
   @Patch(':id/roles')
-  async roles(@Param() params: IdParamDto, @Body() body) {}
+  async roles(@Param() { id }: IdParamDto, @Body() body) {}
 
   @Roles(UserRoles.Admin)
   @Delete()
@@ -243,8 +264,8 @@ export class UsersController {
 
   @Roles(UserRoles.Admin)
   @Delete(':id')
-  async deleteById(@Param() params: IdParamDto) {
-    await this.usersService.deleteById(params.id);
+  async deleteById(@Param() { id }: IdParamDto) {
+    await this.usersService.deleteById(id);
     return { message: 'Користувача видалено' };
   }
 }
