@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
@@ -108,7 +102,7 @@ model Post {
   id          String       @id @default(uuid()) @db.Uuid
   title       String
   description String
-  visibility  Visibility   @default(Public)
+  visibility  Visibility
   likesCount  Int          @default(0)
   isBlocked   Boolean      @default(false) @map("is_blocked")
   isDeleted   Boolean      @default(false) @map("is_deleted")
@@ -167,6 +161,7 @@ model Image {
   height      Int
   format      ImageFormat
   orientation ImageOrientation
+  visibility  Visibility
   isBlocked   Boolean           @default(false) @map("is_blocked")
   isDeleted   Boolean           @default(false) @map("is_deleted")
   user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -193,7 +188,7 @@ model ImageSaving {
 model Collection {
   id         String             @id @default(uuid()) @db.Uuid
   name       String
-  visibility Visibility         @default(Public)
+  visibility Visibility
   user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String             @map("user_id") @db.Uuid
   createdAt  DateTime           @default(now()) @map("created_at")

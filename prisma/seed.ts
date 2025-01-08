@@ -14,7 +14,15 @@ import { postsData } from './fake-data/posts';
 import { commentsData } from './fake-data/comments';
 import { clubsData } from './fake-data/clubs';
 import { notificationsData } from './fake-data/notifications';
-import { markdownToHTML } from 'src/utils/markdown-to-html/markdown-to-html';
+import { marked } from 'marked';
+
+export const markdownToHTML = async (markdown: string) => {
+  const html = await marked(
+    markdown.replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/, ''),
+  );
+
+  return html;
+};
 
 const prisma = new PrismaClient();
 
