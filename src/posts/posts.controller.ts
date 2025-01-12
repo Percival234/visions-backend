@@ -15,7 +15,7 @@ import { FindPostsQueryDto } from './dto/find-posts.dto';
 import { IdParamDto } from 'src/utils/dto/id-param.dto';
 import { Prisma } from '@prisma/client';
 
-@Controller('posts')
+@Controller({ path: 'posts', version: '1' })
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

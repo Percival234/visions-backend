@@ -20,11 +20,11 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 export const CATEGORIES_CACHE_KEY = 'categories';
 
-@Controller('categories')
+@Controller({ path: 'categories', version: '1' })
 export class CategoriesController {
   constructor(
     private readonly categoriesService: CategoriesService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   @Roles(UserRoles.Admin)

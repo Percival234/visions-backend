@@ -20,7 +20,7 @@ import { FindArticlesQueryDto } from './dto/find-articles.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
-@Controller('articles')
+@Controller({ path: 'articles', version: '1' })
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 

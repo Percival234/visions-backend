@@ -11,7 +11,7 @@ import { ContestsService } from './contests.service';
 import { CreateContestDto } from './dto/create-contest.dto';
 import { UpdateContestDto } from './dto/update-contest.dto';
 
-@Controller('contests')
+@Controller({ path: 'contest', version: '1' })
 export class ContestsController {
   constructor(private readonly contestsService: ContestsService) {}
 

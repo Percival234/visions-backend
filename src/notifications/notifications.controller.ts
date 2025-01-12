@@ -22,7 +22,7 @@ import { TokenUserPayload } from 'src/auth/types/token-payload.type';
 import { Request } from 'express';
 import { markdownToHTML } from 'src/utils/markdown-to-html/markdown-to-html';
 
-@Controller('notifications')
+@Controller({ path: 'notifications', version: '1' })
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 

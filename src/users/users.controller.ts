@@ -30,7 +30,7 @@ import { Roles } from 'src/roles/role.decorator';
 import { BlockUserDto } from './dto/block-user.dto';
 import { IdParamDto } from 'src/utils/dto/id-param.dto';
 
-@Controller('users')
+@Controller({ path: 'users', version: '1' })
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,

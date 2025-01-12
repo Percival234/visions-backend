@@ -118,10 +118,8 @@ export class AuthService {
       });
       return payload.roles;
     } catch (error) {
-      // TODO
-      throw new UnauthorizedException(
-        'Не валідний токен (перевірити чи рефреш токен не входить в перевірку помилки в аксіосі)',
-      );
+      // TODO (перевірити чи рефреш токен не входить в перевірку помилки в аксіосі
+      throw new UnauthorizedException('Не валідний токен');
     }
   }
 

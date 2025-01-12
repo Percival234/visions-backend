@@ -21,7 +21,7 @@ import { ClubRoles, MembershipStatus, Prisma } from '@prisma/client';
 import { IdParamDto } from 'src/utils/dto/id-param.dto';
 import { FindMembershipsQueryDto } from './dto/find-memberships.dto';
 
-@Controller('memberships')
+@Controller({ path: 'memberships', version: '1' })
 export class MembershipsController {
   constructor(
     private readonly membershipsService: MembershipsService,

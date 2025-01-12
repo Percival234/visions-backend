@@ -11,7 +11,7 @@ import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 
-@Controller('images')
+@Controller({ path: 'images', version: '1' })
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 

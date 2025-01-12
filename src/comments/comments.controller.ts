@@ -22,7 +22,7 @@ import { BlockCommentDto } from './dto/block-comment.dto';
 import { DeleteCommentsQueryDto } from './dto/delete-comments.dto';
 import { FindCommentsQueryDto } from './dto/find-comments.dto';
 
-@Controller('comments')
+@Controller({ path: 'comments', version: '1' })
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 

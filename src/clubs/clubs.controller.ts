@@ -25,7 +25,7 @@ import { TokenUserPayload } from 'src/auth/types/token-payload.type';
 import { diskStorage } from 'multer';
 import { MembershipsService } from 'src/memberships/memberships.service';
 
-@Controller('clubs')
+@Controller({ path: 'clubs', version: '1' })
 export class ClubsController {
   constructor(
     private readonly clubsService: ClubsService,

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { join } from 'path';
@@ -13,16 +13,17 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+
   app.use(cookieParser());
 
   app.use(helmet());
 
   app.enableCors({
-    origin: [
-      'http://localhost:3300',
-      'https://ce23-176-98-10-105.ngrok-free.app',
-    ],
-    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: ['http://localhost:3300'],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
   });
 

@@ -21,7 +21,7 @@ import { FindReportsQueryDto } from './dto/find-reports.dto';
 import { TokenUserPayload } from 'src/auth/types/token-payload.type';
 import { DeleteReportsQueryDto } from './dto/delete-reports.dto';
 
-@Controller('reports')
+@Controller({ path: 'reports', version: '1' })
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
