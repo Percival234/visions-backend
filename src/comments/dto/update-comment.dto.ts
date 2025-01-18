@@ -17,4 +17,8 @@ export class UpdateCommentDto implements Prisma.CommentUpdateInput {
   @IsOptional()
   @IsBoolean({ message: 'Поле "isDeleted" має бути логічного типу' })
   isDeleted?: boolean;
+
+  @IsOptional()
+  @IsBoolean({ message: 'Поле "isBlocked" має бути логічного типу' })
+  isBlocked?: boolean;
 }

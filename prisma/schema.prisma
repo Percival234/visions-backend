@@ -72,12 +72,23 @@ model User {
   reports            Report[]
   images             Image[]
   settings           Settings?
+  gallery            Gallery?
   memberships        ClubMembership[]
   refreshSessions    RefreshSession[]
   passwordResetToken PasswordResetToken[]
   club               Club?
 
   @@map("user")
+}
+
+model Gallery {
+  id          String       @id @default(uuid()) @db.Uuid
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String       @unique @map("user_id") @db.Uuid
+  images      Image[]
+  collections Collection[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
 }
 
 model Settings {
@@ -171,6 +182,8 @@ model Image {
   savedBy     ImageSaving[]
   collections CollectionImage[]
   post        Post?
+  gallery     Gallery?          @relation(fields: [galleryId], references: [id])
+  galleryId   String?           @db.Uuid
 
   @@map("image")
 }
@@ -195,6 +208,8 @@ model Collection {
   updatedAt  DateTime           @updatedAt @map("updated_at")
   savedBy    CollectionSaving[]
   images     CollectionImage[]
+  gallery    Gallery            @relation(fields: [galleryId], references: [id])
+  galleryId  String             @db.Uuid
 
   @@map("collection")
 }

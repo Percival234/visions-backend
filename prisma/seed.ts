@@ -63,21 +63,25 @@ async function up() {
         settings: {
           create: {},
         },
+        gallery: {
+          create: {},
+        },
       },
     }),
   );
 
   const users = await prisma.$transaction(usersQueries);
 
-  notificationsData.map(async (notification) =>
-    prisma.notification.create({
-      data: {
-        ...notification,
-        textHtml: await markdownToHTML(notification.textMarkdown),
-        senderId: users[1].id,
-        userId: users[0].id,
-      },
-    }),
+  notificationsData.forEach(
+    async (notification) =>
+      await prisma.notification.create({
+        data: {
+          ...notification,
+          textHtml: await markdownToHTML(notification.textMarkdown),
+          senderId: users[1].id,
+          userId: users[0].id,
+        },
+      }),
   );
 
   const clubsQueries = clubsData.map((data, index) =>
@@ -138,13 +142,22 @@ async function up() {
     data: usersReportsData,
   });
 
-  const usersImagesData = imagesData.map((image) => {
-    const randomUser = users[Math.floor(Math.random() * users.length)];
-    return {
-      ...image,
-      userId: randomUser.id,
-    };
-  });
+  const usersImagesData = await Promise.all(
+    imagesData.map(async (image) => {
+      const randomUser = users[Math.floor(Math.random() * users.length)];
+      const userGallery = await prisma.gallery.findUnique({
+        where: {
+          userId: randomUser.id,
+        },
+      });
+
+      return {
+        ...image,
+        userId: randomUser.id,
+        galleryId: userGallery.id,
+      };
+    }),
+  );
 
   const createdImages = await prisma.$transaction(
     usersImagesData.map((imageData) =>
@@ -180,7 +193,7 @@ async function up() {
             createMany: {
               data: commentsData.map((comment) => ({
                 ...comment,
-                userId: users[getRandomNumber(20)].id,
+                userId: users[getRandomNumber(9)].id,
               })),
             },
           },

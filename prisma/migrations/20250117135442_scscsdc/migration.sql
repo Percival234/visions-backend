@@ -35,6 +35,16 @@ CREATE TABLE "user" (
 );
 
 -- CreateTable
+CREATE TABLE "Gallery" (
+    "id" UUID NOT NULL,
+    "user_id" UUID NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Gallery_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "settings" (
     "id" UUID NOT NULL,
     "theme" TEXT NOT NULL DEFAULT 'system',
@@ -111,6 +121,7 @@ CREATE TABLE "image" (
     "user_id" UUID NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "galleryId" UUID,
 
     CONSTRAINT "image_pkey" PRIMARY KEY ("id")
 );
@@ -131,6 +142,7 @@ CREATE TABLE "collection" (
     "user_id" UUID NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "galleryId" UUID NOT NULL,
 
     CONSTRAINT "collection_pkey" PRIMARY KEY ("id")
 );
@@ -327,6 +339,9 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Gallery_user_id_key" ON "Gallery"("user_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "settings_user_id_key" ON "settings"("user_id");
 
 -- CreateIndex
@@ -384,6 +399,9 @@ CREATE INDEX "_CategoryToClub_B_index" ON "_CategoryToClub"("B");
 CREATE INDEX "_CategoryToPost_B_index" ON "_CategoryToPost"("B");
 
 -- AddForeignKey
+ALTER TABLE "Gallery" ADD CONSTRAINT "Gallery_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "settings" ADD CONSTRAINT "settings_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -408,6 +426,9 @@ ALTER TABLE "liked_post" ADD CONSTRAINT "liked_post_post_id_fkey" FOREIGN KEY ("
 ALTER TABLE "image" ADD CONSTRAINT "image_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "image" ADD CONSTRAINT "image_galleryId_fkey" FOREIGN KEY ("galleryId") REFERENCES "Gallery"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "image_saving" ADD CONSTRAINT "image_saving_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -415,6 +436,9 @@ ALTER TABLE "image_saving" ADD CONSTRAINT "image_saving_image_id_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "collection" ADD CONSTRAINT "collection_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "collection" ADD CONSTRAINT "collection_galleryId_fkey" FOREIGN KEY ("galleryId") REFERENCES "Gallery"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "collection_saving" ADD CONSTRAINT "collection_saving_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

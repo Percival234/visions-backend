@@ -18,7 +18,6 @@ import { Roles } from 'src/roles/role.decorator';
 import { Prisma, UserRoles } from '@prisma/client';
 import { Request } from 'express';
 import { TokenUserPayload } from 'src/auth/types/token-payload.type';
-import { BlockCommentDto } from './dto/block-comment.dto';
 import { DeleteCommentsQueryDto } from './dto/delete-comments.dto';
 import { FindCommentsQueryDto } from './dto/find-comments.dto';
 
@@ -87,8 +86,11 @@ export class CommentsController {
     const comment = await this.commentsService.findById(id);
 
     if (
-      !user.roles.includes(UserRoles.Moderator) ||
-      comment.userId !== user.sub
+      !(
+        user.roles.includes(UserRoles.Moderator) ||
+        user.roles.includes(UserRoles.Admin) ||
+        comment.userId === user.sub
+      )
     ) {
       throw new ForbiddenException('В доступі відмовлено');
     }
@@ -96,19 +98,6 @@ export class CommentsController {
     await this.commentsService.update(id, updateComment);
 
     return { message: 'Коментар оновлено' };
-  }
-
-  @Roles(UserRoles.Moderator, UserRoles.Admin)
-  @Patch(':id/block')
-  async block(
-    @Param() { id }: IdParamDto,
-    @Body() blockComment: BlockCommentDto,
-  ) {
-    const comment = await this.commentsService.update(id, blockComment);
-
-    return {
-      message: comment.isBlocked ? 'Пост заблоковано' : 'Пост розблоковано',
-    };
   }
 
   @Roles(UserRoles.Admin)

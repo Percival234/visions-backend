@@ -12,6 +12,6 @@ export class FindQueryDto {
   page: number = 1;
 
   @IsOptional()
-  @Transform(({ value }) => (['desc', 'asc'].includes(value) ? value : 'desc'))
-  order: 'desc' | 'asc' = 'desc';
+  @Transform(({ value }) => (['desc', 'asc'].includes(value) ? value : 'asc'))
+  order: 'desc' | 'asc' = 'asc';
 }

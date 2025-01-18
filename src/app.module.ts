@@ -18,6 +18,8 @@ import { RolesGuard } from './roles/roles.guard';
 import { ConfigModule } from '@nestjs/config';
 import { MembershipsModule } from './memberships/memberships.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { GalleriesModule } from './galleries/galleries.module';
+import { FollowingModule } from './following/following.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     CacheModule.register({
       isGlobal: true,
     }),
+    GalleriesModule,
+    FollowingModule,
   ],
   controllers: [AppController],
   providers: [

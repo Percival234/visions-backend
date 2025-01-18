@@ -22,7 +22,10 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: ['http://localhost:3300'],
+    origin: [
+      'http://localhost:3300',
+      'https://ec01-176-98-10-73.ngrok-free.app',
+    ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
   });

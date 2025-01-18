@@ -2,7 +2,7 @@ import { ImageOrientation, Prisma, Visibility } from '@prisma/client';
 
 export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
   {
-    src: 'https://img.freepik.com/free-photo/spring-s-resurgence-blossoming-flowers-rejuvenation_157027-2549.jpg?t=st=1732648896~exp=1732652496~hmac=8ddcb95b2447ece5bccaca8f0152e679e01a26fd5e3c54f84a5389081d2438d5&w=1380',
+    src: 'https://img.freepik.com/free-photo/spring-s-resurgence-blossoming-flowers-rejuvenation_157027-2549.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -11,7 +11,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/surreal-neon-tropical-flowers_23-2151665812.jpg?t=st=1732975558~exp=1732979158~hmac=105eba7021b2843a8698dfc53a742f51834d63d864b4491353ce6b30070d2cbf&w=1380',
+    src: 'https://img.freepik.com/free-photo/surreal-neon-tropical-flowers_23-2151665812.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -20,7 +20,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/top-view-diet-carrot-cucumber-salad-with-lettuce-board_140725-11536.jpg?t=st=1732635065~exp=1732638665~hmac=2880115747316244bb9d1d24d01716c2b9036d7c9f7c01b7f3e2730a82d5bc6c&w=740',
+    src: 'https://img.freepik.com/free-photo/top-view-diet-carrot-cucumber-salad-with-lettuce-board_140725-11536.jpg?w=740',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -29,7 +29,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/digital-art-volcano-illustration_23-2151778751.jpg?t=st=1732975587~exp=1732979187~hmac=6c5e12a2ee0875c23309beba984d5fb38ecb6d8cfe456e3a1e8c81e76a4d64b8&w=1380',
+    src: 'https://img.freepik.com/free-photo/digital-art-volcano-illustration_23-2151778751.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -38,7 +38,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/digital-lavender-natural-landscape_23-2150538378.jpg?t=st=1732975665~exp=1732979265~hmac=f318a947ba4e2bea6a49863bc10041fd81326322274d29e34fb27b1924726112&w=1380',
+    src: 'https://img.freepik.com/free-photo/digital-lavender-natural-landscape_23-2150538378.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -47,7 +47,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/coast-landscape-digital-art_23-2151575863.jpg?t=st=1732975697~exp=1732979297~hmac=515903baad72cad8997b00a10183b86b495c0e82e3029c919cbcdc0e6e93faf4&w=996',
+    src: 'https://img.freepik.com/free-photo/coast-landscape-digital-art_23-2151575863.jpg?w=996',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -56,7 +56,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Private,
   },
   {
-    src: 'https://img.freepik.com/free-photo/nature-landscape-with-starry-clear-sky_23-2151683063.jpg?t=st=1732975716~exp=1732979316~hmac=1f217e33b202b6041c7a72783464cec962efdf4ad53fc2ebd64d174db8a1ad45&w=1380',
+    src: 'https://img.freepik.com/free-photo/nature-landscape-with-starry-clear-sky_23-2151683063.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -65,7 +65,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Private,
   },
   {
-    src: 'https://img.freepik.com/free-photo/view-mountain-with-dreamy-aesthetic_23-2151700203.jpg?t=st=1732975773~exp=1732979373~hmac=50be9cec70ac0cd796b1e17c7b3831b7af23baef8203d6e32fbf0fe32782f4ff&w=1380',
+    src: 'https://img.freepik.com/free-photo/view-mountain-with-dreamy-aesthetic_23-2151700203.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -74,7 +74,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/rainbow-end-road-landscape_23-2151596720.jpg?t=st=1732975814~exp=1732979414~hmac=cbace5badf2feef3aabd2d146c7173329f5ecc30a5d9bed571a4266174583473&w=740',
+    src: 'https://img.freepik.com/free-photo/rainbow-end-road-landscape_23-2151596720.jpg?w=740',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -83,7 +83,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/nature-landscape-with-starry-clear-sky_23-2151683159.jpg?t=st=1732975976~exp=1732979576~hmac=1754e20880459a848515ca0afcf81d750805eb40e703e32ab3a1ee1d53a435be&w=1380',
+    src: 'https://img.freepik.com/free-photo/nature-landscape-with-starry-clear-sky_23-2151683159.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -92,7 +92,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Followers,
   },
   {
-    src: 'https://img.freepik.com/free-photo/aurora-borealis-landscape-sea_23-2151387570.jpg?t=st=1732975994~exp=1732979594~hmac=7c9ef5ff640d7fc8575a03ce25754f62a5ceb98304fc5bee55bff6b5922942aa&w=1380',
+    src: 'https://img.freepik.com/free-photo/aurora-borealis-landscape-sea_23-2151387570.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -101,7 +101,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Followers,
   },
   {
-    src: 'https://img.freepik.com/free-photo/hawaii-beach-landscape-with-ocean-view_23-2151794943.jpg?t=st=1732976166~exp=1732979766~hmac=c074c55a38587c28f56216a2a19bc5a19a2f4310a129f4cf82f3e0368919a5aa&w=1380',
+    src: 'https://img.freepik.com/free-photo/hawaii-beach-landscape-with-ocean-view_23-2151794943.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -110,7 +110,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/nature-landscape-with-black-sand-beach_23-2151380296.jpg?t=st=1732976198~exp=1732979798~hmac=6319e7ba75f6a04bb78ede31be87e74527d023f82b93f07d7c866c2f676ae906&w=1380',
+    src: 'https://img.freepik.com/free-photo/nature-landscape-with-black-sand-beach_23-2151380296.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -119,7 +119,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/realistic-water-drop-with-ecosystem_23-2151196372.jpg?t=st=1732976308~exp=1732979908~hmac=74c8f3aadeab868b7aa949408942c976d7de0290cc5fc735c85bd6e25dad59ab&w=1380',
+    src: 'https://img.freepik.com/free-photo/realistic-water-drop-with-ecosystem_23-2151196372.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -128,7 +128,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/pterodactylus-nature_23-2151640044.jpg?t=st=1732976354~exp=1732979954~hmac=a7a11bd5027b134bb4aef14a724603d8eab49d2b32f7f306a55200137e4de946&w=826',
+    src: 'https://img.freepik.com/free-photo/pterodactylus-nature_23-2151640044.jpg?w=826',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -137,7 +137,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Followers,
   },
   {
-    src: 'https://img.freepik.com/free-photo/anime-moon-landscape_23-2151645834.jpg?t=st=1732976409~exp=1732980009~hmac=fa83bdc2f0e936842cdc8dfbb1e0b88abc7b9ea603742215854c97eab622ca67&w=740',
+    src: 'https://img.freepik.com/free-photo/anime-moon-landscape_23-2151645834.jpg?w=740',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -146,7 +146,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/stony-beach-landscape_23-2151716288.jpg?t=st=1732976519~exp=1732980119~hmac=f734672f03f38c1d6bcaad8e7273216f768c3a736defaa53e4ad8e01476ca2fb&w=1380',
+    src: 'https://img.freepik.com/free-photo/stony-beach-landscape_23-2151716288.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -155,7 +155,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/beautiful-mountains-landscape_23-2151151098.jpg?t=st=1732976661~exp=1732980261~hmac=57236a8b15851231c9c1963a00a6ccfa02171ca1db863baf0a97bdc1cf26251b&w=1380',
+    src: 'https://img.freepik.com/free-photo/beautiful-mountains-landscape_23-2151151098.jpg?&w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -164,7 +164,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Followers,
   },
   {
-    src: 'https://img.freepik.com/free-photo/surreal-neon-tropical-flowers_23-2151665804.jpg?t=st=1732976690~exp=1732980290~hmac=a6b07de6d6ab58ff88a3a9877d41c48f27dec1d73c87e5868d9a51f0597781ef&w=1380',
+    src: 'https://img.freepik.com/free-photo/surreal-neon-tropical-flowers_23-2151665804.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,
@@ -173,7 +173,7 @@ export const imagesData: Omit<Prisma.ImageUncheckedCreateInput, 'userId'>[] = [
     visibility: Visibility.Public,
   },
   {
-    src: 'https://img.freepik.com/free-photo/minimalist-photorealistic-road_23-2150952999.jpg?t=st=1732976739~exp=1732980339~hmac=43684da40e5694d78d85cd6fa845d69dcc9ebf5619051ce2c4ebd406a144a0a8&w=1380',
+    src: 'https://img.freepik.com/free-photo/minimalist-photorealistic-road_23-2150952999.jpg?w=1380',
     format: 'jpg',
     height: 500,
     width: 600,

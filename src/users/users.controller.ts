@@ -29,12 +29,14 @@ import {
 import { Roles } from 'src/roles/role.decorator';
 import { BlockUserDto } from './dto/block-user.dto';
 import { IdParamDto } from 'src/utils/dto/id-param.dto';
+import { FollowingService } from 'src/following/following.service';
 
 @Controller({ path: 'users', version: '1' })
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
+    private readonly followingService: FollowingService,
   ) {}
 
   @Public()
@@ -43,6 +45,13 @@ export class UsersController {
     const roles = await this.authService.getRoles(body.refreshToken);
     return { roles };
   }
+
+  // @Public()
+  // @Get('name')
+  // async getUserName(@Body() body: { refreshToken: string }) {
+  //   const roles = await this.authService.getRoles(body.refreshToken);
+  //   return { roles };
+  // }
 
   @Public()
   @UseGuards(LocalAuthGuard)
@@ -144,15 +153,23 @@ export class UsersController {
 
     const profile = await this.usersService.findProfileById(sub);
 
-    console.log(profile);
-
     return profile;
   }
 
   @Get('profile/:id')
-  async findProfileById(@Param() { id }: IdParamDto) {
+  async findProfileById(@Req() request: Request, @Param() { id }: IdParamDto) {
+    const { sub } = request.user as TokenUserPayload;
     const profile = await this.usersService.findProfileById(id);
-    return profile;
+
+    if (!profile) {
+      throw new NotFoundException('Такого профілю не існує');
+    }
+
+    const following = await this.followingService.findOne({
+      where: { targetId: id, followerId: sub },
+    });
+
+    return { ...profile, following };
   }
 
   // TODO добавити зміну аватарки

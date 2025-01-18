@@ -64,18 +64,4 @@ export const clubsData: Omit<Prisma.ClubUncheckedCreateInput, 'ownerId'>[] = [
     image:
       'https://img.freepik.com/free-photo/digital-art-isolated-house_23-2151041303.jpg?ga=GA1.1.1985331925.1729016627&semt=ais_hybrid',
   },
-  {
-    name: 'History Buffs',
-    description:
-      'Dive deep into history with people who love uncovering the past.',
-    image:
-      'https://img.freepik.com/free-photo/sky-landscape-digital-art-style-with-tree-silhouette_23-2151120841.jpg?ga=GA1.1.1985331925.1729016627&semt=ais_hybrid',
-  },
-  {
-    name: 'Mindful Meditation',
-    description:
-      'Find peace and focus through group meditation and mindfulness practices.',
-    image:
-      'https://img.freepik.com/free-photo/galactic-night-sky-astronomy-science-combined-generative-ai_188544-9656.jpg?ga=GA1.1.1985331925.1729016627&semt=ais_hybrid',
-  },
 ];
